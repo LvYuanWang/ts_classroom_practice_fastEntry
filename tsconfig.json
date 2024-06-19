@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES2017", // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ESNext'
+        "lib": [ // 指定要包含在编译中的库文件(指的是找类型库)
+            "ES2017",
+            "DOM"
+        ],
+        "outDir": "./dist", // 指定输出目录
+    },
+    "include": [ // 指定要包含的文件或文件夹
+        "src/**/*"
+    ],
+}
