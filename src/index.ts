@@ -152,3 +152,123 @@ function myFilter<T>(arr: T[], callback: (item: T, index?: number) => boolean): 
 
 const filterArr2 = myFilter(["index.java", "index.ts", "index.js", "test.ts"], (item) => item.endsWith(".ts"));
 console.log(filterArr2);
+
+
+// 对象字面量
+const selfName = "xiaoBai";
+const obj: { name: "xiaobai", age: 20, sex: "男" | "女" } = { name: "xiaobai", age: 20, sex: "男" }
+const objArr: { name: string, age: 20 }[] = [
+    { name: "xiaohong", age: 20 },
+    { name: "xiaohei", age: 20 }
+]
+
+function getInfo(user: { name: string, age: number }): { name: string, age: number }[] {
+    return [
+        { name: user.name, age: user.age }
+    ]
+}
+getInfo({ name: "xiaoChou", age: 21 });
+
+
+// 自定义类型: 可以自定义类型, 用来简化复杂类型
+// 两种定义类型的方式
+// 类型别名: 创建一个类型的新的名字, 类型别名可以是任何有效的类型
+// 接口: 接口其实是面向对象的概念, 所以一般用于定义对象类型
+
+// 一. 类型别名
+// 语法: type 类型名 = 类型
+type ID = string | number;
+
+type Age = number;
+
+type User = {
+    id: ID,
+    name: string,
+    age: Age
+}
+
+const user: User = {
+    id: 1,
+    name: "xiaohongmao",
+    age: 23
+}
+
+// 二. 接口
+// 语法: interface 接口名 { 属性名: 类型 }
+interface Point {
+    x: number,
+    y: number
+}
+
+interface Person {
+    id: ID,
+    name: string,
+    age: Age,
+    point: Point
+    sex: "男" | "女"
+}
+
+const obj1: Person = {
+    id: 1,
+    name: "zhangsan",
+    age: 20,
+    sex: "男",
+    point: {
+        x: 1,
+        y: 2
+    }
+}
+
+// 自定义类型用户函数
+function getUser(user: User) {
+    console.log(user.name);
+}
+
+const persons: Person[] = [
+    {
+        id: 1,
+        name: "liSi",
+        age: 23,
+        sex: "男",
+        point: {
+            x: 1,
+            y: 0
+        }
+    },
+    {
+        id: 2,
+        name: "xiaoMei",
+        age: 21,
+        sex: "女",
+        point: {
+            x: 0,
+            y: 1
+        }
+    }
+]
+
+// 函数类型的定义
+type InfoFn = (id: number, name?: string) => string;
+
+// 可选属性和函数声明
+interface Book {
+    id: number,
+    name: string,
+    price?: number,
+    // 函数类型的表示方式
+    show(id: number): void,
+    filter?: (id: number) => void,
+    info?: InfoFn,
+    author?: User
+}
+
+const book: Book = {
+    id: 0,
+    name: "xiaoChou",
+    show: function (id: number): void {
+        console.log(id)
+    },
+    info: function (id: number, name?: string | undefined): string {
+        return `Hello ${id}号 ${name}`;
+    }
+}
