@@ -154,7 +154,7 @@ const filterArr2 = myFilter(["index.java", "index.ts", "index.js", "test.ts"], (
 console.log(filterArr2);
 
 
-// 对象字面量
+/* 对象字面量 */
 const selfName = "xiaoBai";
 const obj: { name: "xiaobai", age: 20, sex: "男" | "女" } = { name: "xiaobai", age: 20, sex: "男" }
 const objArr: { name: string, age: 20 }[] = [
@@ -170,7 +170,7 @@ function getInfo(user: { name: string, age: number }): { name: string, age: numb
 getInfo({ name: "xiaoChou", age: 21 });
 
 
-// 自定义类型: 可以自定义类型, 用来简化复杂类型
+/* 自定义类型: 可以自定义类型, 用来简化复杂类型 */
 // 两种定义类型的方式
 // 类型别名: 创建一个类型的新的名字, 类型别名可以是任何有效的类型
 // 接口: 接口其实是面向对象的概念, 所以一般用于定义对象类型
@@ -272,3 +272,116 @@ const book: Book = {
         return `Hello ${id}号 ${name}`;
     }
 }
+
+
+/* 交叉类型 */
+// 交叉类型是可以将多个类型合并为一个类型
+// 类型A & 类型B
+type A = {
+    id: number,
+    name: string
+}
+
+type B = {
+    age: number,
+    gender: "男" | "女"
+}
+
+type C = A & B;
+type D = A | B; // 联合类型: 可以是A, 也可以是B
+type E = string | number | boolean;
+type F = object & null & undefined; // 交叉类型: 可以是object, 也可以是null, 也可以是undefined
+
+const obj2: C = {
+    id: 1,
+    name: "xiaoLi",
+    age: 20,
+    gender: "男"
+}
+
+const obj3: D = {
+    id: 2,
+    name: "xiaoLv",
+    age: 20
+}
+
+
+/* 类型断言 */
+// 简单来说, TS会根据上下文进行推测, 但是有时候我们可以人为干涉, 确定某个类型
+// 语法: 1.值 as 类型  或者  2.<类型>值
+let someValue: any = "this is a string";
+// 建议使用 as 的方式, 因为react中的jsx语法和 <类型>值 方式会产生歧义
+let strLength1 = (someValue as string).length;
+let strLength2 = (<string>someValue).length;
+
+
+/* 非空断言 */
+// 当你确定某个值不是 null 或者 undefined 时候, 可以直接使用非空断言
+// 语法: 值!
+let maybeString: string | undefined = "hello";
+let defineString = maybeString!;
+
+function getRandom(length?: number) {
+    if (!length || length <= 0) {
+        return undefined;
+    }
+
+    // -length: (-)号表示取反, 也就是取后面的值的负数
+    return Math.random().toString(36).slice(-length);
+}
+let s = getRandom(10);
+// s.charAt(0);    // 这里会报错, 因为s有可能是undefined
+(s as string).charAt(0); // 这里不会报错, 因为使用了非空断言
+s!.charAt(0);   // 这里也不会报错, 因为使用了非空断言
+
+type Box = {
+    id: number,
+    name: string
+}
+
+function getBox(): Box | undefined {
+    if (Math.random() > 0.5) {
+        // as Box: 这里是类型断言, 用来确定返回值的类型
+        return { id: 1, name: "xiaohong" } as Box;
+    }
+    return undefined;
+}
+
+function createProduction(box: Box) {
+    console.log(box);
+}
+
+// createProduction(getBox()); // 这里会报错, 因为getBox()有可能是undefined
+createProduction(getBox()!); // 这里不会报错, 因为使用了非空断言
+createProduction(getBox() as Box); // 这里不会报错, 因为使用了类型断言
+
+// 比如常见的DOM操作
+// const inputDom = document.querySelector("input");
+// inputDom!.addEventListener("click", e => {
+//     console.log((e.target as HTMLInputElement).value);
+// })
+
+
+/* 可选链操作符: 在ES2020就已经存在了 */
+// 语法: 对象?.属性  || 对象?.方法 || 对象?.[key] || 对象?.[key]?.[key] || 对象?.[key]?.[key]?.[key] ...
+type Address = {
+    city: string,
+    street?: string
+}
+
+type Student = {
+    name?: string,
+    address?: Address
+}
+
+const student: Student = {
+    name: "xiaohong",
+    address: {
+        city: "beijing",
+        street: "chaoyang"
+    }
+}
+
+// ES2020就已经存在这种写法了, 当对象的属性不存在时, 不会报错, 而是返回undefined, 反之则返回属性值
+let city = student.address?.city; // 这里不会报错, 因为使用了可选链操作符(也可以使用非空断言或者类型断言...)
+console.log(city);
