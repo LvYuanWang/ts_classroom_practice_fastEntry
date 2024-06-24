@@ -385,3 +385,17 @@ const student: Student = {
 // ES2020就已经存在这种写法了, 当对象的属性不存在时, 不会报错, 而是返回undefined, 反之则返回属性值
 let city = student.address?.city; // 这里不会报错, 因为使用了可选链操作符(也可以使用非空断言或者类型断言...)
 console.log(city);
+
+
+/* 类型声明 */
+import axios from "axios";
+import _ from "lodash";
+import path from "path";
+
+path.join("hello", "world");
+
+axios.get("http://baidu.com").then(res => {
+    console.log(res.data);
+})
+
+_.chunk([1, 2, 3, 4, 5], 2);
